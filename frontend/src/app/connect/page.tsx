@@ -21,22 +21,41 @@ import {
 import Link from 'next/link';
 import { getCorsConfig } from '@/config/cors';
 
-const ACCESS_PASSWORD = 'REDACTED';
-
 export default function ConnectPage() {
   const router = useRouter();
   const { createSession } = useAuth();
   const [passwordInput, setPasswordInput] = useState('');
   const [passwordError, setPasswordError] = useState(false);
+  const [passwordLoading, setPasswordLoading] = useState(false);
   const [authenticated, setAuthenticated] = useState(false);
 
-  const handlePasswordSubmit = (e: React.FormEvent) => {
+  const handlePasswordSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (passwordInput === ACCESS_PASSWORD) {
+    setPasswordLoading(true);
+    setPasswordError(false);
+    try {
+      const res = await fetch('/api/auth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: passwordInput }),
+      });
+      if (!res.ok) {
+        setPasswordError(true);
+        return;
+      }
+      const creds = await res.json();
+      setFormCreds((prev) => ({
+        ...prev,
+        accessKeyId: creds.accessKeyId,
+        secretAccessKey: creds.secretAccessKey,
+        bucketName: creds.bucketName,
+        region: creds.region,
+      }));
       setAuthenticated(true);
-      setPasswordError(false);
-    } else {
+    } catch {
       setPasswordError(true);
+    } finally {
+      setPasswordLoading(false);
     }
   };
 
@@ -285,7 +304,9 @@ export default function ConnectPage() {
             {passwordError && (
               <p className="text-xs text-red-500">Incorrect password. Please try again.</p>
             )}
-            <Button type="submit" className="w-full">Continue</Button>
+            <Button type="submit" className="w-full" disabled={passwordLoading}>
+              {passwordLoading ? 'Verifying...' : 'Continue'}
+            </Button>
           </form>
         </div>
       </div>
