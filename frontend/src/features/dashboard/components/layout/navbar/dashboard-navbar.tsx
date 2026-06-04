@@ -82,8 +82,8 @@ export function DashboardNavbar({ toggleSidebar }: DashboardNavbarProps) {
             href="/dashboard"
             className="flex items-center gap-2 hover:opacity-80 transition-opacity"
           >
-            <Image src="/logo.png" alt="Opndrive" width={32} height={32} className="h-8 w-8" />
-            <h1 className="text-xl font-bold text-foreground">Opndrive</h1>
+            <Image src="/logo.png" alt="Wedding Photos" width={32} height={32} className="h-8 w-8" />
+            <h1 className="text-xl font-bold text-foreground">Tushar & Aishwarya</h1>
           </Link>
           <AriaLabel label="Toggle sidebar navigation" position="bottom">
             <Button
@@ -150,14 +150,14 @@ export function DashboardNavbar({ toggleSidebar }: DashboardNavbarProps) {
                 className={`transition-all duration-300 ${
                   showMobileSearch ? 'h-8 w-8' : 'h-7 w-7'
                 }`}
-                alt="Opndrive Logo"
+                alt="Wedding Photos"
               />
               <h1
                 className={`font-semibold text-foreground transition-all duration-300 ${
                   showMobileSearch ? 'text-lg' : 'text-base'
                 }`}
               >
-                Opndrive
+                Tushar & Aishwarya
               </h1>
             </Link>
           </div>

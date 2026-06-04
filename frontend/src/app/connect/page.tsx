@@ -16,13 +16,30 @@ import {
   ExternalLink,
   Copy,
   Check,
+  Lock,
 } from 'lucide-react';
 import Link from 'next/link';
 import { getCorsConfig } from '@/config/cors';
 
+const ACCESS_PASSWORD = 'REDACTED';
+
 export default function ConnectPage() {
   const router = useRouter();
   const { createSession } = useAuth();
+  const [passwordInput, setPasswordInput] = useState('');
+  const [passwordError, setPasswordError] = useState(false);
+  const [authenticated, setAuthenticated] = useState(false);
+
+  const handlePasswordSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (passwordInput === ACCESS_PASSWORD) {
+      setAuthenticated(true);
+      setPasswordError(false);
+    } else {
+      setPasswordError(true);
+    }
+  };
+
   const [formCreds, setFormCreds] = useState<Credentials>({
     accessKeyId: '',
     secretAccessKey: '',
@@ -241,6 +258,39 @@ export default function ConnectPage() {
     setCopiedCode(true);
     setTimeout(() => setCopiedCode(false), 2000);
   };
+
+  if (!authenticated) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center px-4">
+        <div className="w-full max-w-sm space-y-6">
+          <div className="text-center space-y-2">
+            <div className="flex justify-center mb-4">
+              <div className="p-3 bg-primary/10 rounded-full">
+                <Lock className="h-8 w-8 text-primary" />
+              </div>
+            </div>
+            <h1 className="text-2xl font-bold text-foreground">Tushar & Aishwarya</h1>
+            <p className="text-muted-foreground text-sm">Wedding Photo Upload</p>
+            <p className="text-muted-foreground text-xs">Enter the access password to continue</p>
+          </div>
+          <form onSubmit={handlePasswordSubmit} className="space-y-4">
+            <input
+              type="password"
+              autoFocus
+              className="w-full px-3 py-2 bg-background border border-border rounded-md text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-colors"
+              placeholder="Access password"
+              value={passwordInput}
+              onChange={(e) => { setPasswordInput(e.target.value); setPasswordError(false); }}
+            />
+            {passwordError && (
+              <p className="text-xs text-red-500">Incorrect password. Please try again.</p>
+            )}
+            <Button type="submit" className="w-full">Continue</Button>
+          </form>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background">

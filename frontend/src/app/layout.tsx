@@ -7,9 +7,8 @@ import { ThemeProvider } from '@/providers/theme-provider';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Opndrive - Open-source S3 Compatible Storage Interface',
-  description:
-    'Open-source web interface for S3 compatible storage. Connect your own bucket and manage files with complete control over your data.',
+  title: 'Tushar & Aishwarya - Wedding Photo Upload',
+  description: 'Upload wedding photos securely to our private gallery.',
   icons: {
     icon: [{ url: '/favicon.ico' }],
     shortcut: [{ url: '/favicon.ico' }],
